@@ -15,29 +15,28 @@ twitter = Twython(app_key=apiKey, app_secret=apiSecretKey)
 # search = twitter.search("#BlackLivesMatter")
 
 # %%
-statuses = twitter.search(q='magic')['statuses']
+statuses = twitter.search(q='crypto', tweet_mode='extended', count=250000)['statuses']
 for status in statuses:
-     print(status['user']['screen_name'])
-     print(status['created_at'])
-if 'retweeted_status' in status:
-    print(status["retweeted_status"]['full_text'])
-if 'full_text' in status['retweeted_status']:
-    status['full_text'] = status["retweeted_status"]['full_text']
-else:
-    print(status['full_text'])
-    # print()
+#     print(status['user']['screen_name'])
+#     print(status['created_at'])
+    if 'retweeted_status' in status:
+#         print(status["retweeted_status"]['full_text'])
+        status['full_text'] = status["retweeted_status"]['full_text']
+#     else:
+#         print(status['full_text'])
+#     print()
 
 
 #%%
 texts = [status['full_text'] for status in statuses]
 
 # Create a dataframe with three columns: trump, pelosi, and mcconnell
-uro = [text.lower().count('uro') for text in texts]
-wildernessRec = [text.lower().count('wilderness') for text in texts]
-oko = [text.lower().count('oko') for text in texts]
-astrolabe = [text.lower().count('astrolabe') for text in texts]
-lurrus = [text.lower().count('lurrus') for text in texts]
-d = {'uro':uro, 'oko':oko, 'wildernessRec':wildernessRec, 'astrolabe':astrolabe, 'lurrus':lurrus}
+bitcoin = [text.lower().count('bitcoin') for text in texts]
+dogecoin = [text.lower().count('doge') for text in texts]
+ethereum = [text.lower().count('ethereum') for text in texts]
+litecoin = [text.lower().count('litecoin') for text in texts]
+binance = [text.lower().count('binance') for text in texts]
+d = {'bitcoin':bitcoin, 'dogecoin':dogecoin, 'ethereum':ethereum, 'litecoin':litecoin, 'binance':binance}
 df = pd.DataFrame(data=d)
 
 df.head()
