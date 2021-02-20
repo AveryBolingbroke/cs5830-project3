@@ -15,16 +15,16 @@ twitter = Twython(app_key=apiKey, app_secret=apiSecretKey)
 # search = twitter.search("#BlackLivesMatter")
 
 # %%
-statuses = twitter.search(q='crypto', tweet_mode='extended', count=250000)['statuses']
+statuses = twitter.search(q='crypto OR cryptocurrency OR btc, -winner, -giveaway since:2021-02-13', tweet_mode='extended', count=250000)['statuses']
 for status in statuses:
-#     print(status['user']['screen_name'])
-#     print(status['created_at'])
-    if 'retweeted_status' in status:
-#         print(status["retweeted_status"]['full_text'])
-        status['full_text'] = status["retweeted_status"]['full_text']
-#     else:
-#         print(status['full_text'])
-#     print()
+     print(status['user']['screen_name'])
+     print(status['created_at'])
+if 'retweeted_status' in status:
+    print(status["retweeted_status"]['full_text'])
+    status['full_text'] = status["retweeted_status"]['full_text']
+else:
+    print(status['full_text'])
+print()
 
 
 #%%
