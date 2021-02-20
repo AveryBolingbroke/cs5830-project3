@@ -1,4 +1,5 @@
 # %%
+from numpy.core.arrayprint import array2string
 import pandas as pd
 import numpy as np
 from twython import Twython
@@ -50,35 +51,48 @@ from mtgsdk import Type
 from mtgsdk import Supertype
 from mtgsdk import Subtype
 from mtgsdk import Changelog
+import pandas as pd
+import numpy as np
+from twython import Twython
+import matplotlib.pyplot as plt
 
-untap = Card.where(text='untap step').all()
-upkeep = Card.where(text='upkeep').all()
-firstMain = Card.where(text='first main').all()
-combat = Card.where(text='combat').all()
-secondMain = Card.where(text='second main').all()
-endStep = Card.where(text='end step').all()
-cleanUp = Card.where(text='cleanup').all()
+# untap = Card.where(text='untap step').all()
+cards = Card.all()
+# firstMain = Card.where(text='first main').all()
+# combat = Card.where(text='combat').all()
+# secondMain = Card.where(text='second main').all()
+# endStep = Card.where(text='end step').all()
+# cleanUp = Card.where(text='cleanup').all()
 
+cardsWithUpkeep = ['upkeep' in card.text for card in cards]
+
+for card in cardsWithUpkeep:
+    print(card.name)
+
+# %%
 rows = []
 columns = []
 
+upkeepCount = 0
+
 for row in upkeep:
-    for column in row.find_all('td'):
-        value = column.text.replace('\n', '')
+    for column in row:
+        value = all(column)
         columns.append(value)
+        upkeepCount += 1
     columns = []
     rows.append(columns)
 
-titles = ['title', 'noInflation', 'releaseYear',
-    'grossAsOfYear', 'reference', 'withInflation', 'genre']
+titles = ['untap', 'upkeep', 'firstMain',
+    'combat', 'secondMain', 'endStep', 'cleanUp']
 
 df = pd.DataFrame(data=rows, columns=titles)
-df = df.iloc[:-3] # cleaning data, remove last 3 rows that are not data
+# df = df.iloc[:-3]
 display(df.head())
 display(df.tail())
 
 # print(untap)
-# print(upkeep)
+print(upkeepCount)
 # print(firstMain)
 # print(combat)
 # print(secondMain)
