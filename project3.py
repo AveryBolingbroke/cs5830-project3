@@ -15,15 +15,15 @@ twitter = Twython(app_key=apiKey, app_secret=apiSecretKey)
 # search = twitter.search("#BlackLivesMatter")
 
 # %%
-statuses = twitter.search(q='crypto OR cryptocurrency OR btc, -winner, -giveaway since:2021-02-13', tweet_mode='extended', count=250000)['statuses']
+statuses = twitter.search(q='crypto OR cryptocurrency OR btc, -winner, -giveaway since:2021-02-13', tweet_mode='extended')['statuses']
 for status in statuses:
-     print(status['user']['screen_name'])
-     print(status['created_at'])
-if 'retweeted_status' in status:
-    print(status["retweeted_status"]['full_text'])
-    status['full_text'] = status["retweeted_status"]['full_text']
-else:
-    print(status['full_text'])
+    #  print(status['user']['screen_name'])
+    #  print(status['created_at'])
+    if 'retweeted_status' in status:
+        # print(status["retweeted_status"]['full_text'])
+        status['full_text'] = status["retweeted_status"]['full_text']
+# else:
+#     print(status['full_text'])
 print()
 
 
@@ -41,4 +41,48 @@ df = pd.DataFrame(data=d)
 
 df.head()
 
-#%%
+# %%
+# trying out MTG to see what I can do
+
+from mtgsdk import Card
+from mtgsdk import Set
+from mtgsdk import Type
+from mtgsdk import Supertype
+from mtgsdk import Subtype
+from mtgsdk import Changelog
+
+untap = Card.where(text='untap step').all()
+upkeep = Card.where(text='upkeep').all()
+firstMain = Card.where(text='first main').all()
+combat = Card.where(text='combat').all()
+secondMain = Card.where(text='second main').all()
+endStep = Card.where(text='end step').all()
+cleanUp = Card.where(text='cleanup').all()
+
+rows = []
+columns = []
+
+for row in upkeep:
+    for column in row.find_all('td'):
+        value = column.text.replace('\n', '')
+        columns.append(value)
+    columns = []
+    rows.append(columns)
+
+titles = ['title', 'noInflation', 'releaseYear',
+    'grossAsOfYear', 'reference', 'withInflation', 'genre']
+
+df = pd.DataFrame(data=rows, columns=titles)
+df = df.iloc[:-3] # cleaning data, remove last 3 rows that are not data
+display(df.head())
+display(df.tail())
+
+# print(untap)
+# print(upkeep)
+# print(firstMain)
+# print(combat)
+# print(secondMain)
+# print(endStep)
+# print(cleanUp)
+
+# %%
