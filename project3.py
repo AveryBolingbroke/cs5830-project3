@@ -5,6 +5,7 @@ import numpy as np
 from twython import Twython
 import matplotlib.pyplot as plt
 import json
+import seaborn as sns
 
 #%%
 apiKey = 'YkB57idqRrnYd1MEUN8rYRrC9'
@@ -27,11 +28,53 @@ for status in statuses:
 #     print(status['full_text'])
 print()
 
+#%%
+statuses = []
+MAX_ATTEMPTS = 20
+COUNT_OF_TWEETS_TO_BE_FETCHED = 500 
+
+for i in range(0,MAX_ATTEMPTS):
+
+    if(COUNT_OF_TWEETS_TO_BE_FETCHED < len(tweets)):
+        break # we got 500 tweets... !!
+
+    #----------------------------------------------------------------#
+    # STEP 1: Query Twitter
+    # STEP 2: Save the returned tweets
+    # STEP 3: Get the next max_id
+    #----------------------------------------------------------------#
+
+    # STEP 1: Query Twitter
+    if(0 == i):
+        # Query twitter for data. 
+        results = twitter.search(q="crypto OR cryptocurrency OR btc, -winner, -giveaway since:2021-02-13",count='100', tweet_mode='extended')
+    else:
+        # After the first call we should have max_id from result of previous call. Pass it in query.
+        results = twitter.search(q="crypto OR cryptocurrency OR btc, -winner, -giveaway since:2021-02-13",include_entities='true', tweet_mode='extended',max_id=next_max_id)
+
+    # STEP 2: Save the returned tweets
+    for result in results['statuses']:
+        # tweet_text = result['text']
+        # tweets.append(tweet_text)
+        if 'retweeted_status' in result:
+            result['full_text'] = result["retweeted_status"]['full_text']
+        statuses.append(result)
+
+
+    # STEP 3: Get the next max_id
+    try:
+        # Parse the data returned to get max_id to be passed in consequent call.
+        next_results_url_params = results['search_metadata']['next_results']
+        next_max_id = next_results_url_params.split('max_id=')[1].split('&')[0]
+    except:
+        # No more next pages
+        break
+
 
 #%%
 texts = [status['full_text'] for status in statuses]
 
-# Create a dataframe with three columns: trump, pelosi, and mcconnell
+# Create a dataframe with five columns: bitcoin, dogecoin, ethereum, litecoin, binance
 bitcoin = [text.lower().count('bitcoin') for text in texts]
 dogecoin = [text.lower().count('doge') for text in texts]
 ethereum = [text.lower().count('ethereum') for text in texts]
@@ -40,7 +83,10 @@ binance = [text.lower().count('binance') for text in texts]
 d = {'bitcoin':bitcoin, 'dogecoin':dogecoin, 'ethereum':ethereum, 'litecoin':litecoin, 'binance':binance}
 df = pd.DataFrame(data=d)
 
+#count the occurences of each word, switch the axes
+df = df.aggregate(['sum']).transpose()
 df.head()
+sns.barplot(y="sum", x=['bitcoin','dogecoin','ethereum','litecoin','binance'],data=df)
 
 # %%
 # trying out MTG to see what I can do
