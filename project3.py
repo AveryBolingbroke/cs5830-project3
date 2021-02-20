@@ -32,18 +32,18 @@ print()
 # Follow the Twitter paging process to get more than 100 tweets:
 statuses = []
 MAX_ATTEMPTS = 20
-COUNT_OF_TWEETS_TO_BE_FETCHED = 500 
-queryText = "crypto OR cryptocurrency OR btc, -winner, -giveaway since:2021-02-13"
+COUNT_OF_TWEETS_TO_BE_FETCHED = 500
+queryText = "crypto OR cryptocurrency OR btc, -winner, -giveaway, since:2021-02-13"
 
 for i in range(0,MAX_ATTEMPTS):
 
-    if(COUNT_OF_TWEETS_TO_BE_FETCHED < len(tweets)):
-        break # we got 500 tweets... !!
+    # if(COUNT_OF_TWEETS_TO_BE_FETCHED < len(tweets)):
+        # break # we got 500 tweets... !!
 
     #----------------------------------------------------------------#
-    # STEP 1: Query Twitter
-    # STEP 2: Save the returned tweets
-    # STEP 3: Get the next max_id
+    # STEP 1: Query Twitter                                          #
+    # STEP 2: Save the returned tweets                               #
+    # STEP 3: Get the next max_id                                    #
     #----------------------------------------------------------------#
 
     # STEP 1: Query Twitter
@@ -89,63 +89,6 @@ df = pd.DataFrame(data=d)
 df = df.aggregate(['sum']).transpose()
 df.head()
 # This graph is meaningless
-sns.barplot(y="sum", x=['bitcoin','dogecoin','ethereum','litecoin','binance'],data=df)
-
-# %%
-# trying out MTG to see what I can do
-
-from mtgsdk import Card
-from mtgsdk import Set
-from mtgsdk import Type
-from mtgsdk import Supertype
-from mtgsdk import Subtype
-from mtgsdk import Changelog
-import pandas as pd
-import numpy as np
-from twython import Twython
-import matplotlib.pyplot as plt
-
-# untap = Card.where(text='untap step').all()
-cards = Card.all()
-# firstMain = Card.where(text='first main').all()
-# combat = Card.where(text='combat').all()
-# secondMain = Card.where(text='second main').all()
-# endStep = Card.where(text='end step').all()
-# cleanUp = Card.where(text='cleanup').all()
-
-cardsWithUpkeep = ['upkeep' in card.text for card in cards]
-
-for card in cardsWithUpkeep:
-    print(card.name)
-
-# %%
-rows = []
-columns = []
-
-upkeepCount = 0
-
-for row in upkeep:
-    for column in row:
-        value = all(column)
-        columns.append(value)
-        upkeepCount += 1
-    columns = []
-    rows.append(columns)
-
-titles = ['untap', 'upkeep', 'firstMain',
-    'combat', 'secondMain', 'endStep', 'cleanUp']
-
-df = pd.DataFrame(data=rows, columns=titles)
-# df = df.iloc[:-3]
-display(df.head())
-display(df.tail())
-
-# print(untap)
-print(upkeepCount)
-# print(firstMain)
-# print(combat)
-# print(secondMain)
-# print(endStep)
-# print(cleanUp)
+sns.barplot(y='sum', x=['bitcoin','dogecoin','ethereum','litecoin','binance'],data=df)
 
 # %%
