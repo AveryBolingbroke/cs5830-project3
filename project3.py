@@ -8,13 +8,15 @@ import json
 import seaborn as sns
 
 # -- README --
-#  Run the following cells in order and then a dataframe will be produced.
+#  Run this cell and then a dataframe will be produced.
 #  The dataframe has the DeckName, the Price, the Colors, the Format,
-#  and DeckData which is a nested dataframe containing cards and their counts.  
+#  and DeckData which is a nested dataframe containing cards and their counts.
+#  (DeckData does not print pretty :[ )  
 #
 #  Add the links to each format in the urls list below, and then run the cell!
 #  The output dataframe is stored in the variable 'total'. 
 
+# v CHANGE ME v
 urls =[
     "https://www.mtggoldfish.com/metagame/standard#paper",
     "https://www.mtggoldfish.com/metagame/legacy#paper"
