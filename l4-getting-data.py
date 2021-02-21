@@ -71,6 +71,23 @@ sites = [requests.get(url) for url in urls.values()]
 list(sites[0])[0]
 
 
+
+#%%
+url = "http://mtgtop8.com/search"
+
+import requests
+site = requests.get(url)
+import re
+aggro_matches = len([m for m in re.finditer('(A|a)ggro', site.text)])
+control_matches = len([m for m in re.finditer('(C|c)ontrol', site.text)])
+midrange_matches = len([m for m in re.finditer('(M|m)idrange', site.text)])
+uro_matches = len([m for m in re.finditer(' (U|u)ro ', site.text)])
+
+print(aggro_matches)
+print(control_matches)
+print(midrange_matches)
+print(uro_matches)
+
 # %%
 import re
 
