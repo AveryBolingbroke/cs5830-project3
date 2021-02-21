@@ -19,6 +19,9 @@ import seaborn as sns
 #  runs start in the cell below this, titled SUBSEQUENT RUNS. 
 #  Change the 'url' variable to switch which page it draws data from.
 
+# If you get tired of clicking each cell, go down to RUNNING TOTAL
+# and use jupyter's 'Run above' option. THIS WILL ERASE ANY DATA STORED IN TOTAL.
+
 
 import pandas as pd
 d = {'DeckName':[], 'Price':[], 'Colors':[], 'Format': []}
