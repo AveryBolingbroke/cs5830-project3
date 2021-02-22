@@ -70,15 +70,15 @@ for url in urls:
         thisurl = domain + str(deck.a['href'])
         deckurls.append(thisurl)
 
-    # budgetnames = budgetdecks.find_all('span',{'class':'deck-price-paper'})
-    # for deck in budgetnames:
-    #     thisname = str(deck.a.contents[0])
-    #     decknames.append(thisname)
-    #     print(thisname)
-    #     deckformat.append(formatName+' Budget')
+    budgetnames = budgetdecks.find_all('span',{'class':'deck-price-paper'})
+    for deck in budgetnames:
+        thisname = str(deck.a.contents[0])
+        decknames.append(thisname)
+        print(thisname)
+        deckformat.append(formatName+' Budget')
 
-    #     thisurl = domain + str(deck.a['href'])
-    #     deckurls.append(thisurl)
+        thisurl = domain + str(deck.a['href'])
+        deckurls.append(thisurl)
 
     # Get deck tabletop prices
     prices = []
@@ -94,22 +94,22 @@ for url in urls:
             prices.append(thisprice)
             print(thisprice)
         i+=1
-    # budgetprices=budgetdecks.find_all('div',{'class':'archetype-tile-statistic-value'})
+    budgetprices=budgetdecks.find_all('div',{'class':'archetype-tile-statistic-value'})
 
     # Note that budget prices only have two stats: cost and tix. Thus, take every other.
-    # i = 0
-    # for price in budgetprices:
-    #     if i % 2 == 0:
-    #         thisprice = float(str(price.contents[0].replace('$','').replace(',','').strip()))
-    #         prices.append(thisprice)
-    #         print(thisprice)
-    #     i+=1
+    i = 0
+    for price in budgetprices:
+        if i % 2 == 0:
+            thisprice = float(str(price.contents[0].replace('$','').replace(',','').strip()))
+            prices.append(thisprice)
+            print(thisprice)
+        i+=1
     # Get deck colors
     colors = []
 
     legacycolors = legacydecks.find_all('span', {'class':'manacost'})
-    # budgetcolors = budgetdecks.find_all('span', {'class':'manacost'})
-    for color in legacycolors: #+budgetcolors:
+    budgetcolors = budgetdecks.find_all('span', {'class':'manacost'})
+    for color in legacycolors+budgetcolors:
         thiscolor = color['aria-label'][8:] #after 'colors: '
         colors.append(str(thiscolor.split(' ')))
         # if thiscolor
@@ -156,13 +156,8 @@ for url in urls:
     # RUNNING TOTAL
     total = pd.concat([total, df])
 
-    # dictionary<string, int> colorTally
-    # for deckColors in colors:
-    #   for color in deckColors:
-    #       colorTally[color]++
-
 print(total.head())
-# print(total.head(100))
+print(total.head(100))
 
 
 # %%
@@ -189,13 +184,6 @@ print("STD = " + str(standardPriceSTD))
 
 
 # %%
-priceByColor = sns.scatterplot(x=prices, y=colors)
-display(priceByColor)
 
-# %%
-
-priceByFormat = sns.scatterplot(y=prices, x='Legacy Prices')
-
-display(priceByFormat)
 
 # %%
